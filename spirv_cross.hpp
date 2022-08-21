@@ -86,6 +86,7 @@ struct BuiltInResource
 struct ShaderResources
 {
 	SmallVector<Resource> uniform_buffers;
+    SmallVector<Resource> uniform_constants;
 	SmallVector<Resource> storage_buffers;
 	SmallVector<Resource> stage_inputs;
 	SmallVector<Resource> stage_outputs;

@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <cstring>
 #include <utility>
+#include <iostream>
 
 using namespace std;
 using namespace spv;
@@ -863,7 +864,7 @@ ShaderResources Compiler::get_shader_resources(const unordered_set<VariableID> *
 	bool ssbo_instance_name = reflection_ssbo_instance_name_is_significant();
 
 	ir.for_each_typed_id<SPIRVariable>([&](uint32_t, const SPIRVariable &var) {
-		auto &type = this->get<SPIRType>(var.basetype);
+		auto &type = this->get<SPIRType>(var.basetype); //uniformconstant
 
 		// It is possible for uniform storage classes to be passed as function parameters, so detect
 		// that. To detect function parameters, check of StorageClass of variable is function scope.
@@ -966,6 +967,12 @@ ShaderResources Compiler::get_shader_resources(const unordered_set<VariableID> *
 			res.uniform_buffers.push_back(
 			    { var.self, var.basetype, type.self, get_remapped_declared_block_name(var.self, false) });
 		}
+        // Uniform Constants
+        else if (type.storage == StorageClassUniformConstant)
+        {
+            res.uniform_constants.push_back(
+                { var.self, var.basetype, type.self, get_name(var.self) });
+        }
 		// Old way to declare SSBOs.
 		else if (type.storage == StorageClassUniform && has_decoration(type.self, DecorationBufferBlock))
 		{
