@@ -967,12 +967,6 @@ ShaderResources Compiler::get_shader_resources(const unordered_set<VariableID> *
 			res.uniform_buffers.push_back(
 			    { var.self, var.basetype, type.self, get_remapped_declared_block_name(var.self, false) });
 		}
-        // Uniform Constants
-        else if (type.storage == StorageClassUniformConstant)
-        {
-            res.uniform_constants.push_back(
-                { var.self, var.basetype, type.self, get_name(var.self) });
-        }
 		// Old way to declare SSBOs.
 		else if (type.storage == StorageClassUniform && has_decoration(type.self, DecorationBufferBlock))
 		{
@@ -1024,6 +1018,12 @@ ShaderResources Compiler::get_shader_resources(const unordered_set<VariableID> *
 		{
 			res.acceleration_structures.push_back({ var.self, var.basetype, type.self, get_name(var.self) });
 		}
+        // Uniform Constants
+        else if (type.storage == StorageClassUniformConstant)
+        {
+            res.uniform_constants.push_back(
+                { var.self, var.basetype, type.self, get_name(var.self) });
+        }
 	});
 
 	return res;
